@@ -1,7 +1,7 @@
 terraform {
   required_providers {
     azurerm = {
-      source = "hashicorp/azurerm"
+      source  = "hashicorp/azurerm"
       version = "~> 3.70"
     }
   }
@@ -11,9 +11,9 @@ terraform {
 
 provider "azurerm" {
   subscription_id = var.azure_subscription_id
-  tenant_id = var.azure_tenant_id
-  client_id = var.azure_client_id
-  client_secret = var.azure_client_secret
+  tenant_id       = var.azure_tenant_id
+  client_id       = var.azure_client_id
+  client_secret   = var.azure_client_secret
   features {}
 }
 
@@ -21,7 +21,7 @@ resource "azurerm_resource_group" "app_group" {
   name     = "${var.app_stage}-${var.app_name}"
   location = var.azure_region
   tags = {
-    Name = var.app_name
+    Name  = var.app_name
     Stage = var.app_stage
   }
 }
@@ -32,7 +32,7 @@ resource "azurerm_monitor_action_group" "app_monitor_action_group" {
   short_name          = "Budget Alert"
 
   tags = {
-    Name = var.app_name
+    Name  = var.app_name
     Stage = var.app_stage
   }
 }
@@ -51,7 +51,7 @@ resource "azurerm_consumption_budget_resource_group" "example" {
 
   filter {
     dimension {
-      name = "ResourceId"
+      name   = "ResourceId"
       values = [azurerm_monitor_action_group.app_monitor_action_group.id]
     }
 
@@ -72,13 +72,13 @@ resource "azurerm_consumption_budget_resource_group" "example" {
 
     contact_groups = [azurerm_monitor_action_group.app_monitor_action_group.id]
     contact_emails = ["muryllopimenta@gmail.com"]
-    contact_roles = ["Owner"]
+    contact_roles  = ["Owner"]
   }
 
   notification {
-    enabled   = false
-    threshold = 5.0
-    operator  = "GreaterThan"
+    enabled        = false
+    threshold      = 5.0
+    operator       = "GreaterThan"
     threshold_type = "Forecasted"
 
     contact_groups = [azurerm_monitor_action_group.app_monitor_action_group.id]

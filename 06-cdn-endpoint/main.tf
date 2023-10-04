@@ -1,12 +1,12 @@
 terraform {
   required_providers {
     azurerm = {
-      source = "hashicorp/azurerm"
+      source  = "hashicorp/azurerm"
       version = "~> 3.70"
     }
 
     random = {
-      source = "hashicorp/random"
+      source  = "hashicorp/random"
       version = "~> 3.5"
     }
   }
@@ -16,9 +16,9 @@ terraform {
 
 provider "azurerm" {
   subscription_id = var.azure_subscription_id
-  tenant_id = var.azure_tenant_id
-  client_id = var.azure_client_id
-  client_secret = var.azure_client_secret
+  tenant_id       = var.azure_tenant_id
+  client_id       = var.azure_client_id
+  client_secret   = var.azure_client_secret
   features {}
 }
 
@@ -26,7 +26,7 @@ resource "azurerm_resource_group" "app_group" {
   name     = "${var.app_stage}-${var.app_name}"
   location = var.azure_region
   tags = {
-    Name = var.app_name
+    Name  = var.app_name
     Stage = var.app_stage
   }
 }
@@ -52,7 +52,7 @@ resource "azurerm_storage_account" "app_storage" {
   }
 
   static_website {
-    index_document = "index.html"
+    index_document     = "index.html"
     error_404_document = "404.html"
   }
 
@@ -61,27 +61,27 @@ resource "azurerm_storage_account" "app_storage" {
   }
 
   tags = {
-    Name = var.app_name
+    Name  = var.app_name
     Stage = var.app_stage
   }
 }
 
 resource "azurerm_storage_blob" "index_blob_object" {
-  name                    = "index.html"
-  storage_account_name    = azurerm_storage_account.app_storage.name
-  storage_container_name  = "$web"
-  type                    = "Block"
-  source_content          = "Hello world!"
-  content_type            = "text/html"
+  name                   = "index.html"
+  storage_account_name   = azurerm_storage_account.app_storage.name
+  storage_container_name = "$web"
+  type                   = "Block"
+  source_content         = "Hello world!"
+  content_type           = "text/html"
 }
 
 resource "azurerm_storage_blob" "not_found_blob_object" {
-  name                    = "404.html"
-  storage_account_name    = azurerm_storage_account.app_storage.name
-  storage_container_name  = "$web"
-  type                    = "Block"
-  source_content          = "Not found!"
-  content_type            = "text/html"
+  name                   = "404.html"
+  storage_account_name   = azurerm_storage_account.app_storage.name
+  storage_container_name = "$web"
+  type                   = "Block"
+  source_content         = "Not found!"
+  content_type           = "text/html"
 }
 
 resource "azurerm_cdn_profile" "cdn_profile" {
@@ -89,8 +89,8 @@ resource "azurerm_cdn_profile" "cdn_profile" {
   resource_group_name = azurerm_resource_group.app_group.name
   location            = azurerm_resource_group.app_group.location
   sku                 = "Standard_Microsoft"
-  tags                = {
-    Name = var.app_name
+  tags = {
+    Name  = var.app_name
     Stage = var.app_stage
   }
 }
@@ -108,7 +108,7 @@ resource "azurerm_cdn_endpoint" "cdn_endpoint" {
   resource_group_name           = azurerm_resource_group.app_group.name
   origin_host_header            = azurerm_storage_account.app_storage.primary_web_host
   querystring_caching_behaviour = "IgnoreQueryString"
-  is_http_allowed               = false 
+  is_http_allowed               = false
 
   origin {
     name      = "origin-${random_string.unique.result}"
@@ -116,7 +116,7 @@ resource "azurerm_cdn_endpoint" "cdn_endpoint" {
   }
 
   tags = {
-    Name = var.app_name
+    Name  = var.app_name
     Stage = var.app_stage
   }
 }
