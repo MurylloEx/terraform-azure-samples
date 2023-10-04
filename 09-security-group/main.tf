@@ -115,6 +115,11 @@ resource "azurerm_network_security_group" "app_security_group" {
     source_address_prefix      = "*"
     destination_address_prefix = "*"
   }
+
+  tags = {
+    Name  = var.app_name
+    Stage = var.app_stage
+  }
 }
 
 resource "azurerm_subnet_network_security_group_association" "app_subnet_sg_association_1" {
