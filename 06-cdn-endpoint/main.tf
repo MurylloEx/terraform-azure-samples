@@ -109,7 +109,6 @@ resource "azurerm_cdn_endpoint" "cdn_endpoint" {
   origin_host_header            = azurerm_storage_account.app_storage.primary_web_host
   querystring_caching_behaviour = "IgnoreQueryString"
   is_http_allowed               = false 
-  is_compression_enabled        = true
 
   origin {
     name      = "origin-${random_string.unique.result}"
