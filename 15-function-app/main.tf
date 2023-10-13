@@ -82,6 +82,8 @@ resource "azurerm_linux_function_app" "app_function" {
     "WEBSITE_RUN_FROM_PACKAGE" = ""
     "FUNCTIONS_WORKER_RUNTIME" = "node"
     "APPINSIGHTS_INSTRUMENTATIONKEY" = azurerm_application_insights.app_insights.instrumentation_key,
+    "InputStorageAccountConnectionString" = azurerm_storage_account.app_storage.primary_connection_string
+    "OutputStorageAccountConnectionString" = azurerm_storage_account.app_storage.primary_connection_string
   }
 
   site_config {
@@ -111,6 +113,8 @@ resource "azurerm_linux_function_app_slot" "app_function_slot" {
     "WEBSITE_RUN_FROM_PACKAGE" = ""
     "FUNCTIONS_WORKER_RUNTIME" = "node"
     "APPINSIGHTS_INSTRUMENTATIONKEY" = azurerm_application_insights.app_insights.instrumentation_key,
+    "InputStorageAccountConnectionString" = azurerm_storage_account.app_storage.primary_connection_string
+    "OutputStorageAccountConnectionString" = azurerm_storage_account.app_storage.primary_connection_string
   }
 
   site_config {
