@@ -16,7 +16,7 @@ output "storage_account_id" {
 output "storage_account_connection_string" {
   value       = azurerm_storage_account.app_storage.primary_connection_string
   description = "String de conexão da conta de armazenamento."
-  sensitive   = true
+  sensitive   = false
 }
 
 output "source_storage_container_id" {
